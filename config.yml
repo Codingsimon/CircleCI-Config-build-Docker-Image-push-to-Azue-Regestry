@@ -1,0 +1,16 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/node:latest
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run: docker build -t $REGISTRY_HOST/codingblog-frontend:latest .
+      - run: echo | docker image ls
+      - run: docker login $REGISTRY_HOST -u $DOCKER_USER -p $DOCKER_PASSWORD && docker push $REGISTRY_HOST/codingblog-frontend
+workflows:
+  version: 2
+  build:
+    jobs:
+      - build
